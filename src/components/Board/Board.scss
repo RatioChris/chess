@@ -1,0 +1,43 @@
+// vars
+$board-width: 60vw;
+$border-width: 30px;
+$border-color: burlywood;
+
+.board {
+  position: relative;
+  margin: auto;
+  border: $border-width outset $border-color;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: $board-width;
+  height: $board-width;
+}
+
+.position {
+  position: absolute;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  color: $border-color;
+  font-weight: bold;
+
+  &.files {
+    top: 100%;
+    left: 0;
+    grid-template-columns: repeat(8, 1fr);
+    width: 100%;
+    height: $border-width;
+  }
+
+  &.ranks {
+    top: 0;
+    left: 100%;
+    grid-template-rows: repeat(8, 1fr);
+    width: $border-width;
+    height: 100%;
+  }
+}

@@ -1,0 +1,53 @@
+.piece {
+  position: absolute;
+  width: calc(100% / 8);
+  height: calc(100% / 8);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 90%;
+  transition: all 0.3s;
+  pointer-events: none;
+  z-index: 2;
+
+  &.black {
+    &.rook {
+      background-image: url(/assets/pieces/bR.svg);
+    }
+    &.knight {
+      background-image: url(/assets/pieces/bN.svg);
+    }
+    &.bishop {
+      background-image: url(/assets/pieces/bB.svg);
+    }
+    &.queen {
+      background-image: url(/assets/pieces/bQ.svg);
+    }
+    &.king {
+      background-image: url(/assets/pieces/bK.svg);
+    }
+    &.pawn {
+      background-image: url(/assets/pieces/bP.svg);
+    }
+  }
+
+  &.white {
+    &.rook {
+      background-image: url(/assets/pieces/wR.svg);
+    }
+    &.knight {
+      background-image: url(/assets/pieces/wN.svg);
+    }
+    &.bishop {
+      background-image: url(/assets/pieces/wB.svg);
+    }
+    &.queen {
+      background-image: url(/assets/pieces/wQ.svg);
+    }
+    &.king {
+      background-image: url(/assets/pieces/wK.svg);
+    }
+    &.pawn {
+      background-image: url(/assets/pieces/wP.svg);
+    }
+  }
+}
