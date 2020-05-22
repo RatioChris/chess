@@ -1,14 +1,9 @@
+// vars
+$border-width: 4px;
+
 .square {
   background-color: lightblue;
   transition: transform 0.1s;
-
-  &:hover {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
-    transform: scale(1.075);
-    // filter: brightness(80%);
-    cursor: pointer;
-    z-index: 1;
-  }
 
   &:nth-child(-2n + 8),
   &:nth-child(8) ~ div:nth-child(-2n + 15),
@@ -19,5 +14,17 @@
   &:nth-child(48) ~ div:nth-child(-2n + 56),
   &:nth-child(56) ~ div:nth-child(-2n + 63) {
     background-color: slategray;
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 $border-width darkslategray;
+    transform: scale(1.05);
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  &.active {
+    box-shadow: 0 0 0 $border-width greenyellow;
+    z-index: 1;
   }
 }

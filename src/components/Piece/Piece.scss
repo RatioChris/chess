@@ -50,4 +50,8 @@
       background-image: url(/assets/pieces/wP.svg);
     }
   }
+
+  &.active {
+    z-index: 3;
+  }
 }
