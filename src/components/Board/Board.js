@@ -6,7 +6,8 @@ import Square from 'components/Square'
 import Piece from 'components/Piece'
 
 const Board = props => {
-  const pieces = useSelector(state => state.pieces)
+  const currentPieces = useSelector(state => state.pieces.currentPieces)
+  // console.log('*** currentPieces', currentPieces)
 
   return (
     <section className="board">
@@ -17,7 +18,7 @@ const Board = props => {
       </div>
 
       <div className="pieces">
-        {pieces.map(value => (
+        {currentPieces.map(value => (
           <Piece
             key={value.id}
             color={value.color}

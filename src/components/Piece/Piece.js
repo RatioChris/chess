@@ -7,6 +7,8 @@ import './Piece.scss'
 const SQUARE_WIDTH = `${100 / 8}%`
 
 const Piece = ({ color, name, position }) => {
+  // console.log('*** piece', color, name, position)
+
   const activeSquare = useSelector(state => state.app.activeSquare)
   const cx = classNames({
     piece: true,
@@ -14,7 +16,7 @@ const Piece = ({ color, name, position }) => {
     [name]: true,
     active: position === activeSquare
   })
-  const coords = position?.split('')
+  const coords = [...position]
   const x = FILES.indexOf(coords[0])
   const y = RANKS.indexOf(coords[1])
   const style = {

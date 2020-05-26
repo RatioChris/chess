@@ -1,24 +1,28 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setActiveSquare, setPosition, togglePlayer } from 'store/actions'
+import {
+  setActiveSquare,
+  setPosition,
+  capturePiece,
+  togglePlayer
+} from 'store/actions'
 import classNames from 'classnames'
 import './Square.scss'
 
 const Square = ({ id }) => {
   const dispatch = useDispatch()
   const activeSquare = useSelector(state => state.app.activeSquare)
+  const currentPlayer = useSelector(state => state.app.currentPlayer)
+  const currentPiece = useSelector(state => state.pieces.currentPieces).find(
+    obj => obj.position === id
+  )
+  const activePiece = useSelector(state => state.pieces.currentPieces).find(
+    obj => obj.position === activeSquare
+  )
   const cx = classNames({
     square: true,
     active: id === activeSquare
   })
-
-  const currentPlayer = useSelector(state => state.app.currentPlayer)
-  const currentPiece = useSelector(state => state.pieces).find(
-    obj => obj.position === id
-  )
-  const activePiece = useSelector(state => state.pieces).find(
-    obj => obj.position === activeSquare
-  )
 
   const _clickHandler = id => {
     if (!currentPiece && !activePiece) return
@@ -28,20 +32,24 @@ const Square = ({ id }) => {
       dispatch(setActiveSquare(id))
     } else if (_canMove()) {
       dispatch(setActiveSquare(id))
+
+      // move piece
       dispatch(
         setPosition({
           piece: activePiece,
           position: id
         })
       )
+
+      // capture piece
       if (currentPiece) {
         dispatch(
-          setPosition({
-            piece: currentPiece,
-            position: 'a9'
+          capturePiece({
+            piece: currentPiece
           })
         )
       }
+
       dispatch(togglePlayer())
     }
   }
