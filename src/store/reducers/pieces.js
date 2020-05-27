@@ -28,7 +28,7 @@ const pieces = (state = initialState, action) => {
         currentPieces: state.currentPieces.filter(
           piece => piece.id !== action.obj.piece.id
         ),
-        capturedPieces: [...state.capturedPieces, action.obj]
+        capturedPieces: [...state.capturedPieces, action.obj.piece]
       }
 
     default:

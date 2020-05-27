@@ -2,14 +2,16 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  width: 60vh;
   height: 100vh;
+  margin: auto;
 }
 
 header {
-  padding-bottom: 30px;
+  margin-bottom: 60px;
   font-size: x-large;
   font-weight: bold;
+  text-align: center;
 
   .black {
     color: black;
