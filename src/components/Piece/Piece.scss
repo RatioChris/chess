@@ -1,19 +1,15 @@
 .piece {
-  position: absolute;
   width: calc(100% / 8);
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: 90%;
   transition: all 0.3s;
-  pointer-events: none;
-  z-index: 2;
 
   .board & {
+    position: absolute;
     height: calc(100% / 8);
-  }
-
-  .captured & {
-    height: 100%;
+    pointer-events: none;
+    z-index: 2;
   }
 
   &.black {
@@ -63,7 +59,21 @@
   }
 
   .captured & {
-    position: static;
+    height: 100%;
     padding: 0 30px;
+    animation-name: bounce;
+    animation-duration: 0.3s;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(0);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
   }
 }

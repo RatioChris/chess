@@ -1,16 +1,10 @@
 import React from 'react'
-import classNames from 'classnames'
 import './Tray.scss'
 import Piece from 'components/Piece'
 
 const Tray = ({ pieces, color }) => {
-  const cx = classNames({
-    captured: true,
-    [color]: true
-  })
-
   return (
-    <section className={cx}>
+    <section className={`captured ${color}`}>
       {pieces.map(value => (
         <Piece
           key={value.id}

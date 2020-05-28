@@ -1,7 +1,8 @@
 import { TOGGLE_PLAYER, SET_ACTIVE_SQUARE } from 'store/actions'
+import { BLACK, WHITE } from 'data/constants'
 
 const initialState = {
-  currentPlayer: 'white',
+  currentPlayer: WHITE,
   activeSquare: undefined
 }
 
@@ -10,7 +11,7 @@ const app = (state = initialState, action) => {
 
   switch (action.type) {
     case TOGGLE_PLAYER: {
-      const toggledPlayer = state.currentPlayer === 'white' ? 'black' : 'white'
+      const toggledPlayer = state.currentPlayer === WHITE ? BLACK : WHITE
       return { ...state, currentPlayer: toggledPlayer }
     }
 
