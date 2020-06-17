@@ -1,15 +1,27 @@
 import { BOARD, BLACK, WHITE } from 'data/constants'
 
-const convertPositionToIndex = position => {
+const _convertPositionToIndex = position => {
   return BOARD.findIndex(square => square.id === position)
 }
 
-const getMoves = (player, activePiece, endPosition, currentPiece) => {
+const _convertIndexToPosition = index => BOARD[index].id
+
+const _createPathArray = (pathStart, pathEnd, incrementBy) => {
+  let path = []
+  for (let i = pathStart; i < pathEnd; i += incrementBy) {
+    const id = _convertIndexToPosition(i)
+    path.push(id)
+  }
+  // console.log('*** path', path)
+  return path
+}
+
+const _getMoves = (player, activePiece, endPosition, currentPiece) => {
   const pieceName = activePiece?.name
   const isInitialMove = !activePiece?.hasMoved
-  const src = convertPositionToIndex(activePiece?.position)
-  const dest = convertPositionToIndex(endPosition)
-  console.log('*** moves', pieceName, activePiece, src, dest, isInitialMove)
+  const src = _convertPositionToIndex(activePiece?.position)
+  const dest = _convertPositionToIndex(endPosition)
+  // console.log('*** getMoves', pieceName, activePiece, src, dest, isInitialMove)
 
   switch (pieceName) {
     case 'king': {
@@ -90,6 +102,114 @@ const getMoves = (player, activePiece, endPosition, currentPiece) => {
   }
 }
 
+const _getPath = (activePiece, endPosition) => {
+  const pieceName = activePiece?.name
+  const src = _convertPositionToIndex(activePiece?.position)
+  const dest = _convertPositionToIndex(endPosition)
+  // console.log('*** _getPath', pieceName, activePiece, src, dest)
+  let pathStart, pathEnd, incrementBy
+
+  switch (pieceName) {
+    case 'king': {
+      return []
+    }
+
+    case 'queen': {
+      if (src > dest) {
+        pathStart = dest
+        pathEnd = src
+      } else {
+        pathStart = src
+        pathEnd = dest
+      }
+
+      if (Math.abs(src - dest) % 8 === 0) {
+        incrementBy = 8
+        pathStart += 8
+      } else if (Math.abs(src - dest) % 9 === 0) {
+        incrementBy = 9
+        pathStart += 9
+      } else if (Math.abs(src - dest) % 7 === 0) {
+        incrementBy = 7
+        pathStart += 7
+      } else {
+        incrementBy = 1
+        pathStart += 1
+      }
+
+      return _createPathArray(pathStart, pathEnd, incrementBy)
+    }
+
+    case 'bishop': {
+      if (src > dest) {
+        pathStart = dest
+        pathEnd = src
+      } else {
+        pathStart = src
+        pathEnd = dest
+      }
+
+      if (Math.abs(src - dest) % 9 === 0) {
+        incrementBy = 9
+        pathStart += 9
+      } else {
+        incrementBy = 7
+        pathStart += 7
+      }
+
+      return _createPathArray(pathStart, pathEnd, incrementBy)
+    }
+
+    case 'knight': {
+      return []
+    }
+
+    case 'rook': {
+      if (src > dest) {
+        pathStart = dest
+        pathEnd = src
+      } else {
+        pathStart = src
+        pathEnd = dest
+      }
+
+      if (Math.abs(src - dest) % 8 === 0) {
+        incrementBy = 8
+        pathStart += 8
+      } else {
+        incrementBy = 1
+        pathStart += 1
+      }
+
+      return _createPathArray(pathStart, pathEnd, incrementBy)
+    }
+
+    case 'pawn': {
+      if (dest === src - 16) {
+        return [_convertIndexToPosition(src - 8)]
+      } else if (dest === src + 16) {
+        return [_convertIndexToPosition(src + 8)]
+      }
+      return []
+    }
+
+    default:
+      return
+  }
+}
+
+const _isMoveLegal = (path, currentPieces) => {
+  let isLegal = true
+
+  path.forEach(id => {
+    const isOccupied = currentPieces.find(({ position }) => position === id)
+    // console.log('*** occupied', id, isOccupied, isLegal)
+    if (isOccupied) isLegal = false
+  })
+
+  return isLegal
+}
+
 export const canSelect = (currentPiece, currentPlayer) => {
   return currentPiece?.color === currentPlayer
 }
@@ -98,26 +218,22 @@ export const canMove = (
   activePiece,
   newPosition,
   currentPiece,
-  currentPlayer
+  currentPlayer,
+  currentPieces
 ) => {
   if (!activePiece) return false
 
-  console.log(
-    '*** canMove',
-    activePiece,
-    newPosition,
-    currentPiece,
-    currentPlayer
-  )
   const isSameColor = activePiece?.color === currentPiece?.color
   const isSamePosition = activePiece?.position === currentPiece?.position
-  const isMovePossible = getMoves(
+  const isMovePossible = _getMoves(
     currentPlayer,
     activePiece,
     newPosition,
     currentPiece
   )
-  console.log('*** isMovePossible', isMovePossible)
+  const path = _getPath(activePiece, newPosition)
+  const isMoveLegal = _isMoveLegal(path, currentPieces)
+  // console.warn('*** _getPath', path, isMoveLegal)
 
-  return !isSameColor && !isSamePosition && isMovePossible
+  return !isSameColor && !isSamePosition && isMovePossible && isMoveLegal
 }

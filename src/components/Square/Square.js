@@ -14,12 +14,9 @@ const Square = ({ id }) => {
   const dispatch = useDispatch()
   const activeSquare = useSelector(state => state.app.activeSquare)
   const currentPlayer = useSelector(state => state.app.currentPlayer)
-  const currentPiece = useSelector(state => state.pieces.currentPieces).find(
-    obj => obj.position === id
-  )
-  const activePiece = useSelector(state => state.pieces.currentPieces).find(
-    obj => obj.position === activeSquare
-  )
+  const currentPieces = useSelector(state => state.pieces.currentPieces)
+  const currentPiece = currentPieces.find(obj => obj.position === id)
+  const activePiece = currentPieces.find(obj => obj.position === activeSquare)
   const cx = classNames({
     square: true,
     active: id === activeSquare
@@ -27,11 +24,13 @@ const Square = ({ id }) => {
 
   const _clickHandler = id => {
     if (!currentPiece && !activePiece) return
-    console.log('*** currentPiece, activePiece', currentPiece, activePiece)
+    // console.log('*** currentPiece, activePiece', currentPiece, activePiece)
 
     if (canSelect(currentPiece, currentPlayer)) {
       _setActiveSquare(id)
-    } else if (canMove(activePiece, id, currentPiece, currentPlayer)) {
+    } else if (
+      canMove(activePiece, id, currentPiece, currentPlayer, currentPieces)
+    ) {
       _setActiveSquare(id)
       _movePiece(id)
       if (currentPiece) _capturePiece()
