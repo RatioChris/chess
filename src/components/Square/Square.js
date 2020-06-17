@@ -6,6 +6,7 @@ import {
   capturePiece,
   togglePlayer
 } from 'store/actions'
+import { canSelect, canMove } from 'data/utils'
 import classNames from 'classnames'
 import './Square.scss'
 
@@ -28,39 +29,39 @@ const Square = ({ id }) => {
     if (!currentPiece && !activePiece) return
     console.log('*** currentPiece, activePiece', currentPiece, activePiece)
 
-    if (_canSelect()) {
-      dispatch(setActiveSquare(id))
-    } else if (_canMove()) {
-      dispatch(setActiveSquare(id))
-
-      // move piece
-      dispatch(
-        setPosition({
-          piece: activePiece,
-          position: id
-        })
-      )
-
-      // capture piece
-      if (currentPiece) {
-        dispatch(
-          capturePiece({
-            piece: currentPiece
-          })
-        )
-      }
-
-      dispatch(togglePlayer())
+    if (canSelect(currentPiece, currentPlayer)) {
+      _setActiveSquare(id)
+    } else if (canMove(activePiece, id, currentPiece, currentPlayer)) {
+      _setActiveSquare(id)
+      _movePiece(id)
+      if (currentPiece) _capturePiece()
+      _togglePlayer()
     }
   }
-  const _canSelect = () => {
-    const correctPlayer = currentPiece?.color === currentPlayer
-    return currentPiece && correctPlayer
+
+  const _setActiveSquare = id => {
+    dispatch(setActiveSquare(id))
   }
-  const _canMove = () => {
-    const sameColor = activePiece?.color === currentPiece?.color
-    const samePosition = activePiece?.position === currentPiece?.position
-    return activePiece && !sameColor && !samePosition
+
+  const _movePiece = id => {
+    dispatch(
+      setPosition({
+        piece: activePiece,
+        position: id
+      })
+    )
+  }
+
+  const _capturePiece = () => {
+    dispatch(
+      capturePiece({
+        piece: currentPiece
+      })
+    )
+  }
+
+  const _togglePlayer = () => {
+    dispatch(togglePlayer())
   }
 
   return <div className={cx} onClick={() => _clickHandler(id)} />

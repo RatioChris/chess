@@ -1,5 +1,4 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { FILES, RANKS } from 'data/constants'
 import './Piece.scss'
@@ -7,14 +6,10 @@ import './Piece.scss'
 const SQUARE_WIDTH = `${100 / 8}%`
 
 const Piece = ({ color, name, position }) => {
-  // console.log('*** piece', color, name, position)
-
-  const activeSquare = useSelector(state => state.app.activeSquare)
   const cx = classNames({
     piece: true,
     [color]: true,
-    [name]: true,
-    active: position === activeSquare
+    [name]: true
   })
   const coords = [...position]
   const x = FILES.indexOf(coords[0])

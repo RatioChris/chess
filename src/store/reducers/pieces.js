@@ -16,7 +16,7 @@ const pieces = (state = initialState, action) => {
         currentPieces: [
           ...state.currentPieces.map(piece =>
             piece.id === action.obj.piece.id
-              ? { ...piece, position: action.obj.position }
+              ? { ...piece, position: action.obj.position, hasMoved: true }
               : piece
           )
         ]
