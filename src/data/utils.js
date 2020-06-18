@@ -198,7 +198,23 @@ const _getPath = (activePiece, endPosition) => {
   }
 }
 
-const _isMoveLegal = (path, currentPieces) => {
+const _isMovePossible = (
+  currentPlayer,
+  activePiece,
+  newPosition,
+  currentPiece
+) => {
+  return new Promise((resolve, reject) => {
+    if (_getMoves(currentPlayer, activePiece, newPosition, currentPiece)) {
+      resolve(true)
+    } else {
+      reject('move not possible')
+    }
+  })
+}
+
+const _isMoveLegal = (activePiece, newPosition, currentPieces) => {
+  const path = _getPath(activePiece, newPosition)
   let isLegal = true
 
   path.forEach(id => {
@@ -207,7 +223,13 @@ const _isMoveLegal = (path, currentPieces) => {
     if (isOccupied) isLegal = false
   })
 
-  return isLegal
+  return new Promise((resolve, reject) => {
+    if (isLegal) {
+      resolve(true)
+    } else {
+      reject('move not legal')
+    }
+  })
 }
 
 export const canSelect = (currentPiece, currentPlayer) => {
@@ -223,17 +245,20 @@ export const canMove = (
 ) => {
   if (!activePiece) return false
 
-  const isSameColor = activePiece?.color === currentPiece?.color
-  const isSamePosition = activePiece?.position === currentPiece?.position
-  const isMovePossible = _getMoves(
-    currentPlayer,
-    activePiece,
-    newPosition,
-    currentPiece
-  )
-  const path = _getPath(activePiece, newPosition)
-  const isMoveLegal = _isMoveLegal(path, currentPieces)
-  // console.warn('*** _getPath', path, isMoveLegal)
-
-  return !isSameColor && !isSamePosition && isMovePossible && isMoveLegal
+  return Promise.all([
+    _isMovePossible(currentPlayer, activePiece, newPosition, currentPiece),
+    _isMoveLegal(activePiece, newPosition, currentPieces)
+  ])
+    .then(values => {
+      console.log(
+        `${currentPlayer} ${activePiece.name}: ${activePiece.position} to ${newPosition}`
+      )
+      return true
+    })
+    .catch(error => {
+      console.error(
+        `${currentPlayer} ${activePiece.name}: ${activePiece.position} to ${newPosition} - ${error}`
+      )
+      return false
+    })
 }

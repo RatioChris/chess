@@ -1,4 +1,4 @@
-import { SET_POSITION, CAPTURE_PIECE } from 'store/actions'
+import { CAPTURE_PIECE, RESTART_GAME, SET_POSITION } from 'store/actions'
 import { INIT_STATE } from 'data/constants'
 
 const initialState = {
@@ -10,6 +10,19 @@ const pieces = (state = initialState, action) => {
   // console.log('*** pieces::action', action)
 
   switch (action.type) {
+    case RESTART_GAME: {
+      return { ...initialState }
+    }
+
+    case CAPTURE_PIECE:
+      return {
+        ...state,
+        currentPieces: state.currentPieces.filter(
+          piece => piece.id !== action.obj.piece.id
+        ),
+        capturedPieces: [...state.capturedPieces, action.obj.piece]
+      }
+
     case SET_POSITION:
       return {
         ...state,
@@ -20,15 +33,6 @@ const pieces = (state = initialState, action) => {
               : piece
           )
         ]
-      }
-
-    case CAPTURE_PIECE:
-      return {
-        ...state,
-        currentPieces: state.currentPieces.filter(
-          piece => piece.id !== action.obj.piece.id
-        ),
-        capturedPieces: [...state.capturedPieces, action.obj.piece]
       }
 
     default:

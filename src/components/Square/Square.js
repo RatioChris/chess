@@ -1,9 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  capturePiece,
   setActiveSquare,
   setPosition,
-  capturePiece,
+  setWinner,
   togglePlayer
 } from 'store/actions'
 import { canSelect, canMove } from 'data/utils'
@@ -12,6 +13,7 @@ import './Square.scss'
 
 const Square = ({ id }) => {
   const dispatch = useDispatch()
+  const isGameOver = useSelector(state => state.app.winner)
   const activeSquare = useSelector(state => state.app.activeSquare)
   const currentPlayer = useSelector(state => state.app.currentPlayer)
   const currentPieces = useSelector(state => state.pieces.currentPieces)
@@ -22,14 +24,14 @@ const Square = ({ id }) => {
     active: id === activeSquare
   })
 
-  const _clickHandler = id => {
-    if (!currentPiece && !activePiece) return
+  const _clickHandler = async id => {
+    if (isGameOver || (!currentPiece && !activePiece)) return
     // console.log('*** currentPiece, activePiece', currentPiece, activePiece)
 
     if (canSelect(currentPiece, currentPlayer)) {
       _setActiveSquare(id)
     } else if (
-      canMove(activePiece, id, currentPiece, currentPlayer, currentPieces)
+      await canMove(activePiece, id, currentPiece, currentPlayer, currentPieces)
     ) {
       _setActiveSquare(id)
       _movePiece(id)
@@ -57,6 +59,14 @@ const Square = ({ id }) => {
         piece: currentPiece
       })
     )
+    if (currentPiece.name === 'king') {
+      _togglePlayer()
+      dispatch(
+        setWinner({
+          color: currentPlayer
+        })
+      )
+    }
   }
 
   const _togglePlayer = () => {

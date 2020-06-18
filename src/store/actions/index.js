@@ -1,17 +1,26 @@
 /*
  * action types
  */
-export const TOGGLE_PLAYER = 'TOGGLE_PLAYER'
+export const CAPTURE_PIECE = 'CAPTURE_PIECE'
+export const RESTART_GAME = 'RESTART_GAME'
 export const SET_ACTIVE_SQUARE = 'SET_ACTIVE_SQUARE'
 export const SET_POSITION = 'SET_POSITION'
-export const CAPTURE_PIECE = 'CAPTURE_PIECE'
+export const SET_WINNER = 'SET_WINNER'
+export const TOGGLE_PLAYER = 'TOGGLE_PLAYER'
 
 /*
  * action creators
  */
-export const togglePlayer = () => {
+export const restartGame = () => {
   return {
-    type: TOGGLE_PLAYER
+    type: RESTART_GAME
+  }
+}
+
+export const capturePiece = obj => {
+  return {
+    type: CAPTURE_PIECE,
+    obj
   }
 }
 
@@ -29,9 +38,15 @@ export const setPosition = obj => {
   }
 }
 
-export const capturePiece = obj => {
+export const setWinner = color => {
   return {
-    type: CAPTURE_PIECE,
-    obj
+    type: SET_WINNER,
+    color
+  }
+}
+
+export const togglePlayer = () => {
+  return {
+    type: TOGGLE_PLAYER
   }
 }
