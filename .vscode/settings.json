@@ -1,5 +1,10 @@
 {
-  "eslint.validate": ["javascript", "typescript", "javascriptreact", "typescriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "javascriptreact",
+    "typescriptreact"
+  ],
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

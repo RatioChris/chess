@@ -1,20 +1,21 @@
 // vars
-$board-width: 60vw;
+$board-width: 60vh;
 $border-width: 30px;
 $border-color: burlywood;
 
 .board {
   position: relative;
-  margin: auto;
+  padding-bottom: calc(100% - #{$border-width} * 2);
   border: $border-width outset $border-color;
   box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .grid {
+  position: absolute;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  width: $board-width;
-  height: $board-width;
+  width: 100%;
+  height: 100%;
 }
 
 .position {
@@ -22,7 +23,6 @@ $border-color: burlywood;
   display: grid;
   align-items: center;
   justify-items: center;
-  color: $border-color;
   font-weight: bold;
 
   &.files {
